@@ -1,9 +1,7 @@
 import os
-import mechanicalsoup
 from gmail import Gmail
 from datetime import datetime, timedelta
 import time
-import encodings.idna
 import urllib
 import json
 
@@ -64,39 +62,39 @@ def checkNumbers(currentNumbers: list, outputMessage: str):
                                                                              prizes[powerballMatch][matches]))
     return outputMessage
 
-def getNumbers(outputMessage):
-    # maybe there are others?
-    url = "https://www.valottery.com/Data/Draw-Games/powerball"
+# def getNumbers(outputMessage):
+#     # maybe there are others?
+#     url = "https://www.valottery.com/Data/Draw-Games/powerball"
 
-    # Browser
-    browser = mechanicalsoup.Browser(soup_config={ 'features': 'html.parser'})
+#     # Browser
+#     browser = mechanicalsoup.Browser(soup_config={ 'features': 'html.parser'})
 
-    # The site we will navigate into
-    numbersPage = browser.get(url) #, verify=False)
+#     # The site we will navigate into
+#     numbersPage = browser.get(url) #, verify=False)
 
-    # The main section in which we are interested
-    panel = numbersPage.soup.find("div", {"class": "right-panel"})
+#     # The main section in which we are interested
+#     panel = numbersPage.soup.find("div", {"class": "right-panel"})
 
-    # Output the date for these numbers
-    outputMessage = Print(outputMessage, "The current date being checked is: {0}".format(panel.find("h3", { "class": "title-display"}).contents[0]))
+#     # Output the date for these numbers
+#     outputMessage = Print(outputMessage, "The current date being checked is: {0}".format(panel.find("h3", { "class": "title-display"}).contents[0]))
 
-    # most recent
-    numbers = panel.find("div", {"class": "selected-numbers"})
-    b1 = numbers.find("li").contents[0]
-    b2 = b1.find_next("li").contents[0]
-    b3 = b2.find_next("li").contents[0]
-    b4 = b3.find_next("li").contents[0]
-    b5 = b4.find_next("li").contents[0]
+#     # most recent
+#     numbers = panel.find("div", {"class": "selected-numbers"})
+#     b1 = numbers.find("li").contents[0]
+#     b2 = b1.find_next("li").contents[0]
+#     b3 = b2.find_next("li").contents[0]
+#     b4 = b3.find_next("li").contents[0]
+#     b5 = b4.find_next("li").contents[0]
 
-    powerball  = numbers.find("span", { "id": "bonus-ball-display"}).contents[0]
+#     powerball  = numbers.find("span", { "id": "bonus-ball-display"}).contents[0]
 
-    retVal = [ { int(b1), int(b2), int(b3), int(b4), int(b5)}, { int(powerball) } ]
+#     retVal = [ { int(b1), int(b2), int(b3), int(b4), int(b5)}, { int(powerball) } ]
 
-    # Output what we found
-    #print("Current Numbers: {0} {1} {2} {3} {4} {5}".format(b1, b2, b3, b4, b5, powerball))
-    outputMessage = printEntry(outputMessage, "Current Numbers: {0} \t\tPowerball: {1}\n", retVal)
+#     # Output what we found
+#     #print("Current Numbers: {0} {1} {2} {3} {4} {5}".format(b1, b2, b3, b4, b5, powerball))
+#     outputMessage = printEntry(outputMessage, "Current Numbers: {0} \t\tPowerball: {1}\n", retVal)
 
-    return retVal, outputMessage
+#     return retVal, outputMessage
 
 
 def _getNumbers(outputMessage):
