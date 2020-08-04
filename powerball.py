@@ -4,6 +4,8 @@ from gmail import Gmail
 from datetime import datetime, timedelta
 import time
 import encodings.idna
+import urllib
+import json
 
 myNumbers = [
     [ {10, 19, 29, 37, 46 }, {  6 } ],
@@ -56,7 +58,7 @@ def checkNumbers(currentNumbers: list, outputMessage: str):
         powerballMatch = True if len(ticket[1] & currentNumbers[1]) else False
         matches = len(ticket[0] & currentNumbers[0])
         if powerballMatch == True:
-            ouputMessage = Print ("Powerball matches!")
+            ouputMessage = Print (outputMessage, "Powerball matches!")
         outputMessage = Print (outputMessage, "Matched {0} numbers".format(matches))
         outputMessage = Print (outputMessage, "Ticket {0}: won {1}\n".format(number + 1,
                                                                              prizes[powerballMatch][matches]))
@@ -96,8 +98,23 @@ def getNumbers(outputMessage):
 
     return retVal, outputMessage
 
+
+def _getNumbers(outputMessage):
+    url = "https://data.ny.gov/api/views/d6yy-54nr/rows.json"
+    response = urllib.request.urlopen(url)
+    jsonData = json.loads(response.read())
+    numbers = jsonData['data']
+    latestNumbers = numbers[-1:][0][9].split(' ')
+    latestNumbers = [int(x) for x in latestNumbers]
+    retVal = [ set(latestNumbers[:-1])]
+    retVal.append(set(latestNumbers[-1:]))
+    outputMessage = printEntry(outputMessage, "Current Numbers: {0} \t\tPowerball: {1}\n", retVal)
+
+    return retVal, outputMessage
+
 def main(json_data, context):
     currentNumbers, outputMessage = getNumbers(outputMessage = '')
+    ncn, nom = _getNumbers('')
     outputMessage = checkNumbers(currentNumbers, outputMessage)
 
     g = Gmail()
@@ -110,4 +127,3 @@ def main(json_data, context):
     g.setAuth(username, appkey)
     g.send()
 
-main(0, 0)
