@@ -55,7 +55,7 @@ def checkNumbers(currentNumbers: list, outputMessage: str):
         powerballMatch = True if len(ticket[1] & currentNumbers[1]) else False
         matches = len(ticket[0] & currentNumbers[0])
         if powerballMatch == True:
-            ouputMessage = Print (outputMessage, "Powerball matches!")
+            outputMessage = Print (outputMessage, "Powerball matches!")
         outputMessage = Print (outputMessage, "Matched {0} numbers".format(matches))
         outputMessage = Print (outputMessage, "Ticket {0}: won {1}\n".format(number + 1,
                                                                              prizes[powerballMatch][matches]))
